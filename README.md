@@ -30,6 +30,7 @@ HTTPStatusFilter <url_list_file> <status_code(s)> [--delay=<delay_ms>] [--concur
 * -s <status_code(s)>: One or more status codes or status code ranges.
 * -d <delay_ms>: Optional delay in milliseconds between each request.
 * -c <n>: Optional number of concurrent requests (default is 5).
+* -verbose: Show errors
 * -v: Show version.
 * -h: Show help.
 
