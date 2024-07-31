@@ -12,13 +12,14 @@ import (
     "time"
 )
 
-const version = "1.0.0"
+const version = "1.0.1"
 
 var (
     file        string
     status      string
     delay       int
     concurrency int
+    verbose     bool
     showVersion bool
     showHelp    bool
 )
@@ -28,6 +29,7 @@ func init() {
     flag.StringVar(&status, "s", "", "Expected status codes (comma-separated) or ranges (e.g. 200,201,300-399)")
     flag.IntVar(&delay, "d", 0, "Delay between requests in milliseconds (optional)")
     flag.IntVar(&concurrency, "c", 5, "Number of concurrent requests (optional)")
+    flag.BoolVar(&verbose, "verbose", false, "Show errors (optional)")
     flag.BoolVar(&showVersion, "v", false, "Show version")
     flag.BoolVar(&showHelp, "h", false, "Show help")
 }
@@ -125,7 +127,9 @@ func worker(urls <-chan string, results chan<- string, expectedStatuses map[int]
         time.Sleep(time.Duration(delay) * time.Millisecond)
         resp, err := http.Get(url)
         if err != nil {
-            fmt.Println("Error:", err)
+            if verbose {
+                fmt.Println("Error:", err)
+            }
             continue
         }
         defer resp.Body.Close()
@@ -143,6 +147,7 @@ func printUsage() {
     fmt.Println("  -s : expected status codes (required)")
     fmt.Println("  -d : delay between requests in milliseconds (optional)")
     fmt.Println("  -c : number of concurrent requests (optional)")
+    fmt.Println("  -verbose : show errors (optional)")
     fmt.Println("  -v : show version")
     fmt.Println("  -h : show help")
 }
